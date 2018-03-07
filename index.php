@@ -27,7 +27,9 @@ if(isset($_GET["h"])){
 	echo '<h2>'.count($occurrences).' occurrences</h2>';
 	echo '<ul>';
 	foreach($occurrences as $occurrence){
-		echo '<li><a target="_blank" href="http://www.theatre-classique.fr/pages/programmes/edition.php?t=../documents/'.strtoupper($occurrence["play"]).'.xml#A'.$occurrence["act_n"].'.S'.$occurrence["act_n"].$occurrence["scene_n"].'">'.$occurrence["author"].', <i>'.$occurrence["title"].'</i> ('.$occurrence["genre"].', '.$occurrence["created"].'), '.roman($occurrence["act_n"]).', '.$occurrence["scene_n"].', v. '.$occurrence["line_n"].' : '.$occurrence["line"].'</a></li>';
+		echo '<li><a target="_blank" href="http://www.theatre-classique.fr/pages/programmes/edition.php?t=../documents/'.strtoupper($occurrence["play"]).'.xml#A'.$occurrence["act_n"].'.S'.$occurrence["act_n"].$occurrence["scene_n"].'">'.$occurrence["author"].', <i>'.$occurrence["title"].'</i> ('.$occurrence["genre"].', '.$occurrence["created"].'), '.roman($occurrence["act_n"]).', '.$occurrence["scene_n"];
+		if($occurrence["line"]!=""){echo ', v. '.$occurrence["line_n"].' : '.$occurrence["line"];}
+		echo '</a></li>';
 	}
 	echo '</ul>';
 	echo '</div></body></html>';
@@ -150,6 +152,7 @@ function remove_dieresis($string, $position) {
 }
 function get_occurrences($h, $db){
 	$h = clean($h);
+	$h = str_replace("’", "'", $h);
 	$h = str_replace("'", "''", $h);
 	$sql = "SELECT play, author, title, genre, created, act_n, scene_n, line_n, line FROM patterns where graph = '".$h."'";
 	$results = mselect($sql, $db);
