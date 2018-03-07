@@ -61,24 +61,28 @@ foreach ($files as $file) {
 			$verse = $node;
 		}
 		$total++;
-		continue;
+		// continue;
 		$verse = preg_replace($search, $replace, $verse);
 		$verse = preg_replace("#qu(?=[aeiouyæàâäéèêëîïœôöùûü])#ui", "$", $verse);
 		$verse = preg_replace("#gu(?=[aeiouyæàâäéèêëîïœôöùûü])#ui", "@", $verse);
 		preg_match_all("#eau|oeu|œu|oui|oei|œi|aie|aou|uie|eui|iai|oue|oie|oè|eh|ai|aî|au|oi|oî|ou|où|oû|ei|eu|ieau|ioeu|ia|iaî|iau|ioi|iou|ioù|iei|ieu|ïeu|ia|ie|ée|ié|iè|iê|io|iu|ui|uei|ue|ïe|ïu|(?<![qg])u|(?<=[g])u(?![aeioyæàâäéèêëîïœôöùûü])|[aioæàâäéèêëîïœôöùûü]|(?<![aeioæàâäéèêëîïœôöùûü])y(?![aeioæàâäéèêëîïœôöùûü])|e(?!([  ,.…«»\)\(\-\":;!|)\?\n]*([\nhaeiouyæàâäéèêëîïœôöùûü]|$)|(s[  ,.…:;!«»\)\(\"\?\n]*$)|(nt[  ,.…:;«»!\"\)\(\?\n]*$)))#ui", $verse, $matches, PREG_OFFSET_CAPTURE);
 		$count = count($matches[0]);
-		echo $count."\t".$verse."\n";
+		// echo $count."\t".$verse."\n";
 		if ($count == 12) {
+
 			$cesura = strrpos(substr($verse, $matches[0][5][1], $matches[0][6][1] - $matches[0][5][1]) , " ");
 
 			if ($cesura) {
+
 				$success++;
 				$hemistich1 = substr($verse, 0, $matches[0][5][1] + $cesura);
 				$hemistich1 = clean($hemistich1, $mode);
 				$results[] = $hemistich1;
+
 				$hemistich2 = substr($verse, $matches[0][5][1] + $cesura + 1);
 				$hemistich2 = clean($hemistich2, $mode);
 				$results[] = $hemistich2;
+				echo $hemistich1."\n".$hemistich2."\n";
 
 				if ($mode == "xml") {
 					$node->nodeValue = "";
@@ -91,7 +95,7 @@ foreach ($files as $file) {
 					$node->appendChild($hemistich2);
 				}
 			} elseif (!$cesura and $debug == "ces") {
-				echo $verse;
+				// echo $verse;
 				print_r($matches[0]);
 			}
 		} elseif ($count == 6) {

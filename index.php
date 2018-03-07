@@ -57,29 +57,37 @@ foreach ($diereses as $dierese) {
 	$search[] = $dierese[1];
 	$replace[] = $dierese[0];
 }
-// $file = "../../tcp5t/corneillep_cinna.txt";
+// $file = "../tcp5t/corneillep_cinna.txt";
 // $text = file_get_contents($file);
-$verses = explode("\n", $_POST["text"]);
+$text = $_POST["text"];
+$text = str_replace("\r", "\n", $text);
+$verses = explode("\n", $text);
 foreach ($verses as $verse) {
 	echo "<p>";
 	$verse = preg_replace($search, $replace, $verse);
 	$verse = preg_replace("#qu(?=[aeiouyæàâäéèêëîïœôöùûü])#ui", "$", $verse);
 	$verse = preg_replace("#gu(?=[aeiouyæàâäéèêëîïœôöùûü])#ui", "@", $verse);
-	preg_match_all("#eau|oeu|œu|oui|oei|œi|aie|aou|uie|eui|iai|oue|oie|oè|eh|ai|aî|au|oi|oî|ou|où|oû|ei|eu|ieau|ioeu|ia|iaî|iau|ioi|iou|ioù|iei|ieu|ïeu|ia|ie|ée|ié|iè|iê|io|iu|ui|uei|ue|ïe|ïu|(?<![qg])u|(?<=[g])u(?![aeioyæàâäéèêëîïœôöùûü])|[aioæàâäéèêëîïœôöùûü]|(?<![aeioæàâäéèêëîïœôöùûü])y(?![aeioæàâäéèêëîïœôöùûü])|e(?!([  ,.…«»\)\(\-\":;!|)\?\n]*([\nhaeiouyæàâäéèêëîïœôöùûü]|$)|(s[  ,.…:;!«»\)\(\"\?\n]*$)|(nt[  ,.…:;«»!\"\)\(\?\n]*$)))#ui", $verse, $matches, PREG_OFFSET_CAPTURE);
+		preg_match_all("#eau|oeu|œu|oui|oei|œi|aie|aou|uie|eui|iai|oue|oie|oè|eh|ai|aî|au|oi|oî|ou|où|oû|ei|eu|ieau|ioeu|ia|iaî|iau|ioi|iou|ioù|iei|ieu|ïeu|ia|ie|ée|ié|iè|iê|io|iu|ui|uei|ue|ïe|ïu|(?<![qg])u|(?<=[g])u(?![aeioyæàâäéèêëîïœôöùûü])|[aioæàâäéèêëîïœôöùûü]|(?<![aeioæàâäéèêëîïœôöùûü])y(?![aeioæàâäéèêëîïœôöùûü])|e(?!([  ,.…«»\)\(\-\":;!|)\?\n]*([\nhaeiouyæàâäéèêëîïœôöùûü]|$)|(s[  ,.…:;!«»\)\(\"\?\n]*$)|(nt[  ,.…:;«»!\"\)\(\?\n]*$)))#ui", $verse, $matches, PREG_OFFSET_CAPTURE);
 	$count = count($matches[0]);
 	if ($count == 12) {
 		$cesura = strrpos(substr($verse, $matches[0][5][1], $matches[0][6][1] - $matches[0][5][1]) , " ");
 		if ($cesura) {
 			$hemistich = substr($verse, 0, $matches[0][5][1] + $cesura);
+			// echo "<br/>".$hemistich."<br/>";
 			echo display($hemistich, $db, 1);
 			echo " ";
 			$hemistich = substr($verse, $matches[0][5][1] + $cesura + 1);
+			// echo "<br/>".$hemistich."<br/>";
 			echo display($hemistich, $db, 2);
+		}else{
+			echo remove_dieresis($verse, 1);
+			// echo "<pre>";print_r($matches);echo "</pre>";
 		}
 	} elseif ($count == 6) {
 		echo display($verse, $db, 1);
 	} else{
 		echo remove_dieresis($verse, 1);
+		// echo "<pre>";print_r($matches);echo "</pre>";
 	}
 	echo "</p>";
 }
@@ -115,6 +123,7 @@ function display($hemistich, $db, $position){
 }
 function occurrences($string, $db){
 	$string = clean($string);
+	$string = str_replace("’", "'", $string);
 	$string = str_replace("'", "''", $string);
 	$sql = "SELECT c as count FROM hc WHERE graph = '".$string."'";
 	$count = select($sql, $db);
