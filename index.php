@@ -35,15 +35,16 @@ if(isset($_GET["h"])){
 	echo '</div></body></html>';
 	return;
 }
+// var_dump($_POST["post"]);
 if(!isset($_POST["text"])){
-	include("form.html");
+	include("form.php");
 	return;
 }
 echo '<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8"/>
-        <title>Hémistiches répétés</title>
+        <title>Détection des hémistiches formulaires</title>
         <link rel="stylesheet" href="style.css"/>
     </head>
 
@@ -61,7 +62,12 @@ foreach ($diereses as $dierese) {
 }
 // $file = "../tcp5t/corneillep_cinna.txt";
 // $text = file_get_contents($file);
-$text = $_POST["text"];
+if($_POST["corpus"] == "") {
+	$text = $_POST["text"];
+}else{
+	$text = select("SELECT text FROM plays WHERE play = '".$_POST["corpus"]."'", $db);
+	$text = $text["text"];
+}
 $text = str_replace("\r", "\n", $text);
 $verses = explode("\n", $text);
 foreach ($verses as $verse) {

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
-        <title>Hémistiches répétés</title>
+        <title>Détection des hémistiches formulaires</title>
         <link rel="stylesheet" href="style.css"/>
     </head>
 
@@ -19,6 +19,10 @@ Leur justice sans nous en saura bien résoudre.
 Quand vous aurez parlé, nous verrons quels avis
 Dans cette occasion doivent être suivis.
           </textarea>
+          <select name="corpus">
+            <option value="" selected>Ou sélectionner un texte du corpus : </option>
+            <?php include("options.html") ?>
+          </select>
           <input type="submit" value="Envoyer"/>
       </form>
       </div>
