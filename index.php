@@ -15,7 +15,7 @@ if(isset($_GET["h"])){
 	<html>
 	    <head>
 	        <meta charset="UTF-8"/>
-	        <title>Hémistiches répétés</title>
+					<title>Détection des hémistiches formulaires</title>
 	        <link rel="stylesheet" href="style.css"/>
 	    </head>
 

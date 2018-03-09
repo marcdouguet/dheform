@@ -4,7 +4,7 @@
 
   $sql = "SELECT play, author, title, genre, created FROM plays";
   $corpus = mselect($sql,$db);
-  $data = "";
+  $data = ""; 
   foreach ($corpus as $play){
     $data .= "<option value='".$play["play"]."'>"
     .$play["author"]
