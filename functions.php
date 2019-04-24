@@ -2,7 +2,12 @@
 
 function clean($string) {
 
-    $string = mb_strtolower($string, "UTF-8");
+    // $string = mb_strtolower($string, "UTF-8");
+    $string = str_replace(
+      array("À","Á","Â","Ä","È","É","Ê","Ë","Ì","Í","Î","Ï","Ò","Ó","Ô","Ö","Ù","Ú","Û","Ü","Œ","Æ"),
+      array("à","á","â","ä","è","é","ê","ë","ì","í","î","ï","ò","ó","ô","ö","ù","ú","û","ü","œ","æ"),
+      $string
+    );
     $string = str_replace(array(
 	".",
 	",",
